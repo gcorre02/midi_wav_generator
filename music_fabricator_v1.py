@@ -2,7 +2,7 @@
 # music_fabricator_v1.py
 # One-stop: modal Roman progressions -> WAV stems + MIDI (arp/pad/bass/perc) + optional style jobs (pad/arp/rain)
 
-import os, math, re, wave, argparse, csv
+import os, math, re, wave, argparse, csv, midiutil
 import numpy as np
 import yaml
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
