@@ -1,0 +1,49 @@
+outdir: renders
+
+defaults:
+  sr: 44100
+  bpm: 88
+  bars: 11            # bars ~= length; 11 bars @ 88 bpm ~ 30s
+  color: neutral      # for synth timbre: neutral|warm|bright
+  export_pdf: true
+  export_wav: true
+  export_midi: true
+
+jobs:
+  # --- Blade Runner piece (practice + percussion + MIDI) ---
+  - name: blade_runner_piece
+    key: D
+    mode: Dorian
+    progression_A: [i(add9), VII, IIImaj7, IVsus2]
+    progression_B: [bVIImaj7, IV, IVsus2, i(add9)]
+    # per-job overrides
+    bpm: 88
+    bars: 11
+    exports:
+      practice_wav: blade_runner_practice.wav
+      percussion_wav: blade_runner_percussion.wav
+      pdf_path: blade_runner_chords_voicings.pdf
+      midi_arp: blade_runner_arp.mid
+      midi_pad: blade_runner_pad.mid
+      midi_bass: blade_runner_bass.mid
+      midi_perc: blade_runner_percussion.mid
+
+  # --- Optional: batch “style” render like make_tracks_v5 ---
+  - name: three_creatures_rain
+    key: Bb
+    mode: Aeolian
+    progression_A: [i(add9), VII(maj7), v(add9), VIIsus2]
+    progression_B: []           # can be empty
+    bpm: 72
+    bars: 12
+    style: rain                 # pad|arp|rain
+    rain:
+      start: 0.6
+      end: 0.95
+      jitter_ms: 18
+      thunder: true
+      thunder_every: 2
+    exports:
+      style_wav: three_creatures_RAIN.wav
+      style_mid: three_creatures_RAIN.mid
+      crescendo_csv: three_creatures_crescendo.csv
