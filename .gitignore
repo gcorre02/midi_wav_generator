@@ -1,0 +1,7 @@
+*.wav
+*.mid
+/.venv
+/.idea
+.DS_Store
+*.csv
+*.pdf

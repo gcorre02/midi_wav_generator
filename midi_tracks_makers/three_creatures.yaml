@@ -1,0 +1,23 @@
+outdir: renders
+
+defaults:
+  bpm: 72
+  loops: 8
+  sr: 44100
+  style: pad
+  thunder: true
+  thunder_every: 2
+  rain_start: 0.6 # 0.6 default
+  rain_end: 0.95 #0.95 default
+  jitter_ms: 18
+  color: neutral
+
+jobs:
+  - name: three_creatures2
+    key: Bb Aeolian
+    progression: [i(add9), VII(maj7), v(add9), VIIsus2]
+    style: rain
+    loops: 12
+    thunder: true
+    crescendo_csv: true
+    color: warm
