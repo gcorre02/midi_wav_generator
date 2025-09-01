@@ -10,39 +10,61 @@ defaults:
   export_midi: true
 
 jobs:
-  # --- Blade Runner piece (practice + percussion + MIDI) ---
   - name: blade_runner_piece
-    key: D
-    mode: Dorian
-    progression_A: [i(add9), VII, IIImaj7, IVsus2]
-    progression_B: [bVIImaj7, IV, IVsus2, i(add9)]
-    # per-job overrides
-    bpm: 88
-    bars: 11
+    # sections supersede top-level key/mode/progressions when present
+    sections:
+      - key: D
+        mode: Dorian
+        progression_A: [i(add9), VII, IIImaj7, IVsus2]
+        progression_B: [bVIImaj7, IV, IVsus2, i(add9)]
+        repeats:
+          A: 2   # play Theme A twice
+          B: 1   # then Theme B once
+      - key: F
+        mode: Dorian
+        progression_A: [i(add9), VII, III, IVsus2]   # mild reharm in new key
+        repeats:
+          A: 1
+          B: 0
+
     exports:
       practice_wav: blade_runner_practice.wav
       percussion_wav: blade_runner_percussion.wav
-      pdf_path: blade_runner_chords_voicings.pdf
+      pdf_timeline: blade_runner_chords_timeline.pdf   # timeline
+      pdf_voicings: blade_runner_chords_voicings.pdf       # LH/RH voicings
       midi_arp: blade_runner_arp.mid
       midi_pad: blade_runner_pad.mid
       midi_bass: blade_runner_bass.mid
       midi_perc: blade_runner_percussion.mid
 
-  # --- Optional: batch “style” render like make_tracks_v5 ---
+    instrument_map:
+      midi:
+        style: { channel: 0, program: 91 }   # e.g., polysynth pad for rain events
+        arp:    { channel: 0, program: 81 }  # channel is 0-based (0..15)
+        pad:    { channel: 1, program: 91 }
+        bass:   { channel: 2, program: 38 }
+        perc:
+          channel: 9                          # GM drums (channel 10)
+          layers:
+            brush:  { notes: [42,44], vel_min: 12, vel_max: 28, density: 0.70, jitter_ms: 15 }
+            shaker: { notes: [70],    vel_min: 40, vel_max: 65, density: 0.55, jitter_ms: 10 }
+            tom:    { notes: [43,41], vel_min: 48, vel_max: 64, every_bars: 4, swell_beats: 2.0 }
+      audio:
+        brush:  { synth: noise, lp_alpha: 0.06, hp_alpha: 0.008, gain: 0.12 }
+        shaker: { synth: noise, lp_alpha: 0.03, gain: 0.15 }
+        tom:    { synth: tom,   freq_hz: 70.0, lp_alpha: 0.02, gain: 0.6 }
+
+  # Optional “style” render (unchanged), still works with sections:
   - name: three_creatures_rain
-    key: Bb
-    mode: Aeolian
-    progression_A: [i(add9), VII(maj7), v(add9), VIIsus2]
-    progression_B: []           # can be empty
+    sections:
+      - key: Bb
+        mode: Aeolian
+        progression_A: [i(add9), VII(maj7), v(add9), VIIsus2]
+        repeats: { A: 3, B: 0 }
     bpm: 72
     bars: 12
-    style: rain                 # pad|arp|rain
-    rain:
-      start: 0.6
-      end: 0.95
-      jitter_ms: 18
-      thunder: true
-      thunder_every: 2
+    style: rain
+    rain: { start: 0.6, end: 0.95, jitter_ms: 18, thunder: true, thunder_every: 2 }
     exports:
       style_wav: three_creatures_RAIN.wav
       style_mid: three_creatures_RAIN.mid
