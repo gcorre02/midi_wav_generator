@@ -410,7 +410,7 @@ def make_pdf(path, title, timeline, bars_per_page=None):
 def write_arp_midi(path, job, events):
     if not HAVE_MIDI: print("[MIDI] midiutil not installed; skip arp"); return
     bpm=job["bpm"]; ch=midi_ch(job,"arp",0); prog=midi_prog(job,"arp")
-    mf=MIDIFile(1); tr=0; mf.addTempo(tr,0,bpm)
+    mf=MIDIFile(1); tr=0; #mf.addTempo(tr,0,bpm)
     send_program(mf,tr,ch,prog)
     for onset_sec, dur_sec, note, vel in events:
         mf.addNote(tr, ch, note, onset_sec*(bpm/60.0), max(0.05,dur_sec*(bpm/60.0)), vel)
@@ -419,7 +419,8 @@ def write_arp_midi(path, job, events):
 def write_pad_midi(path, job, chords):
     if not HAVE_MIDI: print("[MIDI] midiutil not installed; skip pad"); return
     bpm=job["bpm"]; bars=job["bars"]; ch=midi_ch(job,"pad",0); prog=midi_prog(job,"pad")
-    mf=MIDIFile(1); tr=0; mf.addTempo(tr,0,bpm); send_program(mf,tr,ch,prog)
+    mf=MIDIFile(1); tr=0; #mf.addTempo(tr,0,bpm);
+    send_program(mf,tr,ch,prog)
     time=0.0
     for bar in range(bars):
         for n in chords[bar % len(chords)]:
@@ -430,7 +431,8 @@ def write_pad_midi(path, job, chords):
 def write_bass_midi(path, job, root_notes):
     if not HAVE_MIDI: print("[MIDI] midiutil not installed; skip bass"); return
     bpm=job["bpm"]; bars=job["bars"]; ch=midi_ch(job,"bass",0); prog=midi_prog(job,"bass")
-    mf=MIDIFile(1); tr=0; mf.addTempo(tr,0,bpm); send_program(mf,tr,ch,prog)
+    mf=MIDIFile(1); tr=0; #mf.addTempo(tr,0,bpm);
+    send_program(mf,tr,ch,prog)
     time=0.0
     for bar in range(bars):
         root = root_notes[bar % len(root_notes)]
@@ -452,7 +454,7 @@ def write_perc_midi(path, job, events):
     if not HAVE_MIDI:
         print("[MIDI] midiutil not installed; skip perc"); return
     bpm=job["bpm"]
-    mf=MIDIFile(1); tr=0; mf.addTempo(tr,0,bpm)
+    mf=MIDIFile(1); tr=0; #mf.addTempo(tr,0,bpm)
     ch = int(imidi(job).get("perc",{}).get("channel", 9))  # default GM drums
     # no program change on GM drums channel usually; we skip
 
@@ -882,7 +884,7 @@ def main():
             if events is not None and ex.get("style_mid") and HAVE_MIDI:
                 mf = MIDIFile(1);
                 tr = 0
-                mf.addTempo(tr, 0, job["bpm"])
+                #mf.addTempo(tr, 0, job["bpm"])
 
                 # Prefer explicit "style" channel/program; else fall back to arp, then pad
                 style_ch = midi_ch(job, "style", midi_ch(job, "arp", midi_ch(job, "pad", 0)))
